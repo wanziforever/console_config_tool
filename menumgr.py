@@ -127,6 +127,11 @@ class ConsoleModel(object):
         self._model = {'root': None}
 
     def find_by_path(self, path):
+        """find the target item by path, since the item is linked by
+        path in this model
+
+        :return type: class `menumgr.Menu` or 'form.Form'
+        """
         return self._model.get(path, None)
 
     def set_by_path(self, path, data):
@@ -154,6 +159,16 @@ class MenuManager(object):
         self._form_console_model = ConsoleModel()
 
     def _new_path(self, old, part):
+        """ generate the new path base on old path
+
+        :type old: str
+        :param old: the base part to do generation
+        
+        :type part: str
+        :param part: new suffix part to do generation
+
+        :return type: str, new generated path
+        """
         if old == '':
             return part
         return old + '.' + part
@@ -200,6 +215,14 @@ class MenuManager(object):
         recursive_build(self._main, path)
 
     def add(self, menu, ismain):
+        """add the menu to the manager
+
+        :type menu: `menumgr.Menu`
+        :param menu: menu instance to be added
+
+        :type ismain: Boolen
+        :param ismain: is the menu a root menu, only one root menu is allowed
+        """
         if ismain:
             if self._main is not None:
                 raise Exception("only one main menu should be defined")
@@ -224,37 +247,21 @@ class MenuManager(object):
         self._recursive_show_debug(self._main, level=0)
 
     def show_menu(self, menu):
+        """print the items for a specified menu
+        :type menu: `menumgr.Menu`
+        :param menu: menu instance to be added
+        """
         for index, item in menu.get_items():
             print(item.get_title())
 
     def show_main(self):
         self.show_menu(self._main)
 
-    def execute_item(self, index):
-        formType=False
-        item = self._current_menu.get_item(index)
-        if item.get_type(return_string=False) == MenuItem.FormType:
-            formType=True
-            #print("find a form, going to show the form, the id is "+ item.get_formid())
-        elif item.get_type(return_string=False) == MenuItem.MenuType:
-            formType=False
-            next_menu = self._item_menu_map[item]
-            self._current_menu = next_menu
-        return formType
-
     def startup(self):
         self._current_menu = self._main
 
     def list_current_items(self):
         return [item.get_title() for index, item in self._current_menu.get_items()]
-
-    def upward_menu(self):
-        menu = self._menu_backward_map.get(self._current_menu, None)
-        if menu is not None:
-            self._current_menu = menu
-        else:
-            print("")
-            #print("this is the toppest level of menu")
 
     def current_title(self):
         return self._current_menu.get_title()

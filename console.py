@@ -26,6 +26,16 @@ aaaa, you currently will see the sub items form cccc, and form dddd, and your
 current path is '1', when user enter 2, a new path '1.2' will be generated
 and user will navigated to form 1.2 dddd. now the form dddd view will in front
 of you.
+
+there are several levels of controlers, the controlers are used to control the
+most behavior, the toppest level one is ConsoleControler which receive every
+event, and distribute it to its child controlers. for example, the
+ConsoleControler accept the user main interactor command, and have a check
+whether it is a `quit` command, if it is not, ConsoleControler send it to its
+child controler main panel controler, main panel controler currently has nothing
+to do except transfer it to view controler (maybe the main panel will do some
+further action later), view controler will determine the menu and form view
+switching and do the switch.
 """
 
 import urwid as uw
@@ -43,6 +53,7 @@ class MenuView(uw.ListBox):
 
     def _wrap_rows(self, rows):
         """the text cannot directly add to listbox, use Text widget wrap
+        
         :type rows: list of tuple
         :param rows: member is a tuple (index, menu_title_text)
         """
@@ -63,18 +74,31 @@ class MenuViewControler(object):
     """menu view controler, normally the content of the menu change is
     triggered by a key press by user navigation operation. provide a do
     method to accept the uplevel controler command and do view navigation
+
+    :type model: class `menumgr.ConsoleModel`
+    :param model: menu model data containing the path and menu mapping
     """
     def __init__(self, model):
         self._view = None
         self._model = model
 
     def get_view(self):
+        """"return the Menu view widget in urwid
+        :return type: class 'urwid.Widget'
+        """
         if self._view is not None:
             return self._view
 
         return self._view
 
     def do(self, path):
+        """execute the path navigation
+
+        :type path: str
+        :param path: the internal path to a menu item
+
+        :return type: Boolen, if cannot find the route target, return False
+        """
         menu = self._model.find_by_path(path)
         if menu is None:
             return False
@@ -89,6 +113,9 @@ class MenuViewControler(object):
 class FormViewControler(object):
     """form view controler, mainly use to cordinate the form generator to
     retrieve the form base on the specified path
+
+    :type model: class `menumgr.ConsoleModel`
+    :param model: menu model data containing the path and form mapping
     """
     def __init__(self, model):
         self._view = None
@@ -98,6 +125,13 @@ class FormViewControler(object):
         return self._view
 
     def do(self, path):
+        """execute the path navigation
+
+        :type path: str
+        :param path: the internal path to a form item
+
+        :param model: menu model data containing the path and form mapping
+        """
         form = self._model.find_by_path(path)
         log(form)
         if form is None:
@@ -112,9 +146,16 @@ class ViewSwitcher(object):
     view, the switcher will consider the current status (current path located)
     and determine the next view. switcher will also in charge of generated
     new paths.
+
+    :type menctl: class `console.MenuViewControler`
+    :param menctl: the menu controler instance
+
+    :type formctl: class `console.FormViewControler`
+    :param formctl: the menu controler instance
     """
     menu_upward = ['U', 'u']
     root_menu = ['', 'root']
+    
     def __init__(self, menuctl, formctl):
         self._current_path = ''
         self._menuctl = menuctl
@@ -126,7 +167,18 @@ class ViewSwitcher(object):
         return self._menuctl
 
     def do(self, cmd):
-        """accept the uplevel controler command"""
+        """accept the uplevel controler command, and ask low level
+        controler to do something. here let the menu controler or
+        form controler to navigate its menu or form.
+        firstly try to do menu navigation, and if fail, then do form
+        navigation.
+
+        :type cmd: str
+        :param cmd: the command send from upper level controler
+
+        :return type: `console.MenuViewControler` or `console.FormViewControler`
+                       None for nothing to go
+        """
         path = ""
         if cmd in self.menu_upward:
             if self._current_path not in self.root_menu:
@@ -156,6 +208,15 @@ class ViewSwitcher(object):
 class MainPanelControler(object):
     """main panel view control, use view switcher to determine which view
     to show, manager the main panel widget.
+
+    :type main_panel: urwid.Widget
+    :param main_panel: the view widget of the main panel
+
+    :type menctl: class `console.MenuViewControler`
+    :param menctl: the menu controler instance
+
+    :type formctl: class `console.FormViewControler`
+    :param formctl: the menu controler instance
     """
     def __init__(self, main_panel, menuctl, formctl):
         self._main_panel = main_panel
@@ -175,6 +236,9 @@ class MainPanelControler(object):
         self.switch_view(newctl)
 
     def get_view(self):
+        """get the main panel view widget in urwid
+        :return type: `urwid.Widget`
+        """
         return self._main_panel
 
     def startup_view(self):

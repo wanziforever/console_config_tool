@@ -1,0 +1,37 @@
+<Menus>
+<Menu id="main" title="请选择配置项">
+<Item type="menu" ref="cluster" title="集群配置"/>
+<Item type="menu" ref="resource" title="资源配置"/>
+<Item type="menu" ref="database" title="数据库信息"/>
+<Item type="menu" ref="test" title="这是我的测试"/>
+</Menu>
+<Menu id="cluster" title="集群配置">
+<Item type="form" formid="networkConfig" desc="网络配置" title="网络配置"/>
+<Item type="form" formid="nodeConfig" desc="主节点配置" title="主节点配置"/>
+</Menu>
+<Menu id="resource" title="资源配置">
+<Item type="form" formid="fenceConfig" desc="fence设备" title="fence设备"/>
+<Item type="form" formid="shareDiskConfig" desc="共享存储" title="共享存储"/>
+</Menu>
+<Menu id="database" title="数据库配置">
+<Item type="form" formid="dbConfig" desc="" title="Database Basic Configuration"/>
+<Item type="form" formid="userConfig" desc="" title="User Configureation"/>
+<Item type="form" formid="paraConfig" desc="" title="Parameter Configuration"/>
+<Item type="form" formid="charSetConfig" desc="" title="Character Set Configuration"/>
+<Item type="form" formid="encryConfig" desc="" title="Encryption Configuration"/>
+</Menu>
+<Menu id="test" title="这是我的测试">
+<Item type="menu"  ref="hello" title="test menu1"/>
+<Item type="menu"  ref="hi" title="test menu2"/>
+<Item type="form" formid="form1" desc="" title="form1"/>
+<Item type="form" formid="form2" desc="" title="form2"/>
+</Menu>
+<Menu id="hello" title="这是我的测试">
+<Item type="form" formid="form1" desc="" title="form1"/>
+<Item type="form" formid="form2" desc="" title="form2"/>
+</Menu>
+    <Menu id="hi" title="这是我的测试">
+<Item type="form" formid="form1" desc="" title="form1"/>
+<Item type="form" formid="form2" desc="" title="form2"/>
+</Menu>
+</Menus>

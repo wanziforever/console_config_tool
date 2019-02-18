@@ -1,0 +1,35 @@
+<Form id="network_management_form" entitle="MANAGE THE NETWORK" chtitle="网络配置">
+  <Row>
+    <Tag w="12" align="center" value="管理网络##manage your network"></Tag>
+  </Row>
+  <Row>
+    <Tag w="6" align="left" margin="20 0 0 0" value="网卡名:##network card:"></Tag>
+    <Input id="network_name" w="6" default="输入网卡名##input_your_network_name"></Input>
+  </Row>
+  <Row>
+    <Tag w="6" align="left" margin="20 0 0 0" value="子网名:##subnework name:"></Tag>
+    <Input id="vip" w="6" default="输入子网名##input_your_network_name"></Input>
+  </Row>
+  <Row>
+    <Tag w="6" align="left" margin="20 0 0 0" value="类型:##category:"></Tag>
+    <Input id="actualip" w="6" default="input_your_network_name"></Input>
+  </Row>
+  <Row>
+    <Button w="6" margin="40 0 0 0" value="提交##submit" method="pakage.module.file.function1(formData)"></Button>
+  </Row>
+  <Row>
+    <Tag w="12" align="center" value="------------------当前已经创建的网络----------------------##--------------------network already created---------------------"></Tag>
+  </Row>
+  <Row>
+    <Table id="current_networks" data="package.networkmodule.function()"> # the data should contain a index field
+      <Th value="网卡名##network card"></Th>
+      <Th value="子网名##subnework name"></Th>
+      <Th value="类型##category"></Th>
+    </Table>
+  </Row>
+  <Row>
+    <Tag w="4" align="left" margin="20 0 0 0" value="删除指定记录:"></Tag>
+    <Input id="remove" w="4" default=""></Input>
+    <Button w="4" value="删除" method="package.module.file.function2(formdata)"></Button>
+  </Row>
+</Form>

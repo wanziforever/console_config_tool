@@ -6,7 +6,7 @@ import sqlite3
 
 class Database():
 
-    db_path = "/root/sqlite-autoconf-3270100/purogconfig.db"
+    db_path = "./purogconfig.db"
     def __init__(self):
         self.setupConn()
 

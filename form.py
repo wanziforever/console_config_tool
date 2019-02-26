@@ -8,6 +8,13 @@ handle all the form import and dynamic generation
 
 import urwid as uw
 import time
+import sqlite3
+#import forms.dbBaseConfigForm
+from forms.dbProfileForm import dbProfileForm
+from forms.networkMangementForm import networkManagementForm
+from forms.dbUserConfigForm import dbUserConfigForm
+from forms.shareStorageForm import shareStorageForm
+from forms.fenseDeviceForm import fenseDeviceForm
 
 class Form(uw.Overlay):
     pass
@@ -28,7 +35,7 @@ def example_form():
     div = uw.Divider()
     text = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
     button = uw.Button(text)
-    
+
     pile = uw.Pile([
         network_id,
         network_name,
@@ -47,4 +54,10 @@ class Form(object):
     def gen_view(self):
         """import the view form script file and generate a form view"""
         # here just simply use an exmaple
+        if self._id == "baseConfig":
+            form = dbProfileForm()
+            return form.show_form()
+
         return example_form()
+
+

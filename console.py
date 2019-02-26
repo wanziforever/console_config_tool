@@ -41,6 +41,11 @@ switching and do the switch.
 import urwid as uw
 from log import log
 
+palette = [
+    ("underline", "underline", "black"),
+    ("reverse", "light gray,standout", "black"),
+    ('title', 'light gray', 'black')
+]
 class MenuView(uw.ListBox):
     """show menu item information in the menu view
     
@@ -349,7 +354,7 @@ class Console(object):
                                footer=get_footer())
 
     def _run(self):
-        self._loop = uw.MainLoop(self._frame)
+        self._loop = uw.MainLoop(self._frame, palette)
         #main.show_menu(menu)
         self._loop.run()
 
@@ -375,3 +380,4 @@ class Console(object):
 
 if __name__ == "__main__":
     pass
+

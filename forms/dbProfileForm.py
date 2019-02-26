@@ -103,11 +103,18 @@ class dbProfileForm():
         # handle if the data is none.
         if datarows[0][1] == None:
             _dataPath = ""
+
         if datarows[0][4] == None:
             _logPath = ""
         self.pathdir.set_text("*安装路径：    "+str(datarows[0][0]))
         self.datadir.set_edit_text(""+str(_dataPath))
         self.port.set_edit_text(""+str(datarows[0][2]))
-        self.arch_chk.set_state(datarows[0][3])
+
+        if datarows[0][3] == 0:
+            self.arch_chk.set_state(False)
+        else:
+            self.arch_chk.set_state(True)
+
         self.log.set_edit_text("" + str(_logPath))
         sqlite.closeConn()
+

@@ -43,4 +43,3 @@ class Database():
         except():
             print("数据库执行错误！")
 
-

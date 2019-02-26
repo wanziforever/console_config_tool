@@ -60,4 +60,3 @@ class Form(object):
 
         return example_form()
 
-

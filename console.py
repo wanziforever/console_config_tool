@@ -44,7 +44,14 @@ from log import log
 palette = [
     ("underline", "underline", "black"),
     ("reverse", "light gray,standout", "black"),
-    ('title', 'light gray', 'black')
+    ('title', 'light gray', 'black'),
+    ('body', 'black', 'light gray', 'standout'),
+    ('button normal', 'light gray', 'dark blue', 'standout'),
+    ('button select', 'white', 'dark green'),
+    ('button disabled', 'dark gray', 'dark blue'),
+    ('edit', 'light gray', 'dark blue'),
+    ('bigtext', 'white', 'black'),
+    ('exit', 'white', 'dark cyan')
 ]
 class MenuView(uw.ListBox):
     """show menu item information in the menu view
@@ -380,4 +387,3 @@ class Console(object):
 
 if __name__ == "__main__":
     pass
-

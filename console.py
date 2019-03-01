@@ -45,6 +45,10 @@ palette = [
     ("underline", "underline", "black"),
     ("reverse", "light gray,standout", "black"),
     ('title', 'light gray', 'black'),
+    ('normal', '', ''),
+    ('bold', 'bold', ''),
+    ('blue', 'bold', 'dark blue'),
+    ('highlight', 'black', 'dark blue'),
     ('body', 'black', 'light gray', 'standout'),
     ('button normal', 'light gray', 'dark blue', 'standout'),
     ('button select', 'white', 'dark green'),
@@ -55,7 +59,7 @@ palette = [
 ]
 class MenuView(uw.ListBox):
     """show menu item information in the menu view
-    
+
     :type rows: list of tuple
     :param rows: member is a tuple (index, menu_title_text)
     """
@@ -65,7 +69,7 @@ class MenuView(uw.ListBox):
 
     def _wrap_rows(self, rows):
         """the text cannot directly add to listbox, use Text widget wrap
-        
+
         :type rows: list of tuple
         :param rows: member is a tuple (index, menu_title_text)
         """
@@ -80,7 +84,7 @@ class MenuView(uw.ListBox):
         :param rows: member is a tuple (index, menu_title_text)
         """
         self.body = uw.SimpleListWalker(self._wrap_rows(rows))
-        
+
 
 class MenuViewControler(object):
     """menu view controler, normally the content of the menu change is
@@ -167,7 +171,7 @@ class ViewSwitcher(object):
     """
     menu_upward = ['U', 'u']
     root_menu = ['', 'root']
-    
+
     def __init__(self, menuctl, formctl):
         self._current_path = ''
         self._menuctl = menuctl
@@ -199,13 +203,13 @@ class ViewSwitcher(object):
                     path = "root"
                 else:
                     path = ".".join(tokens[-1])
-                
+
         else:
             if self._current_path in self.root_menu:
                 path = cmd
             else:
                 path = self._current_path + "." + cmd
-        
+
         if self._menuctl.do(path):
             self._current_path = path
             return self._menuctl
@@ -263,7 +267,7 @@ class ConsoleControler(object):
     to every sub controlers
     """
     console_exit = ['Q', 'q']
-    
+
     def __init__(self):
         self._mainctl = None
 
@@ -273,12 +277,12 @@ class ConsoleControler(object):
     def do(self, cmd):
         if cmd in self.console_exit:
             raise uw.ExitMainLoop()
-        
+
         if not self._mainctl.do(cmd):
             return
 
         # someother sub controler do one by one ...
-    
+
 
 def get_header():
     """frame header"""
@@ -296,7 +300,7 @@ class MainPanel(uw.WidgetPlaceholder):
     """control how to show the form and menu"""
     def __init__(self, *args):
         super(MainPanel, self).__init__(uw.SolidFill('^'))
-        
+
     def show_form(self, form):
         self.original_widget = form
 
@@ -304,7 +308,7 @@ class MainPanel(uw.WidgetPlaceholder):
         """use a unified interface to set the menu with padding"""
         self.original_widget = uw.Padding(menu, left=2)
 
-    
+
 def get_main_panel():
     #return uw.WidgetPlaceholder(uw.SolidFill())
     #menu = get_menu(menuitems)
@@ -318,7 +322,7 @@ class MainInteractor(uw.Edit):
     def __init__(self, *args):
         self._controler = None
         super(MainInteractor, self).__init__(*args)
-    
+
     def keypress(self, size, key):
         if key == 'enter':
             self._controler.do(self.get_edit_text())
@@ -381,9 +385,9 @@ class Console(object):
         # for startup, firstly swith to menu view
         #self._mainctl.switch_view(self._menuctl)
         self._mainctl.startup_view()
-        
+
         self._run()
-        
+
 
 if __name__ == "__main__":
     pass

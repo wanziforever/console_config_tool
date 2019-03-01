@@ -39,12 +39,16 @@ class dbProfileForm():
 
         self.get_db_record()
 
+        # empty
+        empty = urwid.Text("    ")
+
         # button
         save = urwid.Button("保存")
         urwid.AttrMap(save, None, focus_map='reversed')
         cancel = urwid.Button("取消")
         urwid.connect_signal(save, 'click', self.on_save_clicked)
         urwid.connect_signal(cancel, 'click', self.on_cancel_clicked)
+        btns = urwid.Columns([save, cancel])
 
         pile = urwid.Pile([
             title,
@@ -59,8 +63,8 @@ class dbProfileForm():
             self.arch_chk,
             div,
             logEdit,
-            save,
-            cancel
+            btns,
+
         ])
         return urwid.Filler(pile)
 
@@ -117,4 +121,3 @@ class dbProfileForm():
 
         self.log.set_edit_text("" + str(_logPath))
         sqlite.closeConn()
-

@@ -11,10 +11,10 @@ import time
 import sqlite3
 #import forms.dbBaseConfigForm
 from forms.dbProfileForm import dbProfileForm
-from forms.networkMangementForm import networkManagementForm
-from forms.dbUserConfigForm import dbUserConfigForm
-from forms.shareStorageForm import shareStorageForm
-from forms.fenseDeviceForm import fenseDeviceForm
+from forms.networkMgrForm import networkMgrForm
+#from forms.dbUserConfigForm import dbUserConfigForm
+#from forms.shareStorageForm import shareStorageForm
+#from forms.fenseDeviceForm import fenseDeviceForm
 
 class Form(uw.Overlay):
     pass
@@ -56,6 +56,9 @@ class Form(object):
         # here just simply use an exmaple
         if self._id == "baseConfig":
             form = dbProfileForm()
+            return form.show_form()
+        if self._id =="networkConfig":
+            form = networkMgrForm()
             return form.show_form()
 
         return example_form()

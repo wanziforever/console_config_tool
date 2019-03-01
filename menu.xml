@@ -5,14 +5,17 @@
 <Item type="menu" ref="resource" title="资源配置"/>
 </Menu>
 <Menu id="network" title="网络配置">
-<Item type="form" formid="networkInfo" desc="" title="查看网卡信息"/>
 <Item type="form" formid="networkConfig" desc="" title="管理网卡信息"/>
+<Item type="form" formid="networkInfo" desc="" title="查看网卡信息"/>
 </Menu>
 
 <Menu id="database" title="数据库配置信息">
-<Item type="form" formid="baseConfig" desc="" title="配置数据库数据存储目录"/>
-<Item type="form" formid="dbstatus" desc="" title="数据库状态"/>
-<Item type="form" formid="userConfig" desc="" title="账号信息管理"/>
+<Item type="form" formid="baseConfig" desc="" title="数据库基本配置"/>
+<Item type="form" formid="dbInit" desc="" title="数据库初始化"/>
+    <Item type="form" formid="dbStartStop" desc="" title="数据库启动和停止"/>
+    <Item type="form" formid="dbStatus" desc="" title="数据库状态"/>
+<Item type="form" formid="superUser" desc="" title="超级用户"/>
+    <Item type="form" formid="repUser" desc="" title="流复制用户"/>
 </Menu>
 <Menu id="resource" title="资源配置">
 <Item type="form" formid="shareDiskConfig" desc="共享存储" title="共享存储配置"/>

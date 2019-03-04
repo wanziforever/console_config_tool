@@ -45,6 +45,7 @@ palette = [
     ("underline", "underline", "black"),
     ("reverse", "light gray,standout", "black"),
     ('title', 'light gray', 'black'),
+    ('redfont', 'dark red,bold', 'black'),
     ('normal', '', ''),
     ('bold', 'bold', ''),
     ('blue', 'bold', 'dark blue'),
@@ -357,7 +358,7 @@ class Console(object):
         [
             (1, uw.SolidFill()),
             self._mainctl.get_view(),
-            uw.Filler(self._maininteractor, valign="bottom"),
+            (1, uw.Filler(self._maininteractor, valign="bottom")),
             ((1, uw.SolidFill('-')))
 
         ])

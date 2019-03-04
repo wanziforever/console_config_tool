@@ -5,6 +5,7 @@ import urwid
 import socket, fcntl, struct
 import re
 from IPy import IP
+from Database import Database
 
 class HighgoButton(urwid.Button):
     button_left = urwid.Text('[')
@@ -17,7 +18,13 @@ def hg_button(*args, **kwargs):
     b = urwid.Padding(b, left=1, right=1)
     return b
 
+'''
+显示当前网卡信息，动态读取并展示，用户可以点击保存。
 
+首次打开，动态读取的数据会自动写入数据库。第一条记录为public，后面的所有记录为private
+
+如果数据库中有记录，不会再次写入数据库，只会根据动态读取数据进行显示，第一条为Public，后面的为Private。用户修改点击保存后，才会录入数据库。
+'''
 class networkMgrForm():
 
     networkInfo ={}
@@ -46,6 +53,23 @@ class networkMgrForm():
 
     def onSave(self):
         print ("save")
+        # setup db connection
+        sqlite = Database()
+        # check if there is record in db or not. if number of records is 0, then insert. otherwise update the existing records
+        sql = 'delete from networkinfo'
+        sqlite.executeDB(sql)
+        i = 0
+        for item, value in self.networkInfo.items():
+            if self.radioButtonPub[i].state == True:
+                sql = 'insert into networkinfo (networkName, subnet, networkType) values ("' + (str)(item) + \
+                          '", "' + (str)(value) + \
+                          '", "'+'Public")'
+            else:
+                sql = 'insert into networkinfo (networkName, subnet, networkType) values ("' + (str)(item) + \
+                      '", "' + (str)(value) + \
+                      '", "' + 'Private")'
+            sqlite.executeDB(sql)
+        sqlite.closeConn()
 
     def onCancel(self):
         print("cancel")
@@ -64,23 +88,45 @@ class networkMgrForm():
         self.getNetworkInfo()
 
         # 假设最多有10组网卡信息
-        typeGroup = [[], [], [], [], [], [], [], [], [], []]  # 最多10组
+        self.typeGroup = [[], [], [], [], [], [], [], [], [], []]  # 最多10组
         empty = urwid.Text(" ")  # 设置空行，美化页面配置
 
+        # setup db connection
+        sqlite = Database()
         i = 0
         for item, value in self.networkInfo.items():
-            if i==0:
-             rows.append(urwid.Columns([urwid.Text("网卡"+(str)(i+1)+"："+(str)(item)),
+            if i == 0:
+                sql = 'insert into networkinfo (networkName, subnet, networkType) values ("' + (str)(item) + \
+                        '", "' + (str)(value) + \
+                        '", "Public")'
+            else:
+                sql = 'insert into networkinfo (networkName, subnet, networkType) values ("' + (str)(item) + \
+                          '", "' + (str)(value) + \
+                          '",  "Private")'
+            i = i + 1
+            sqlite.executeDB(sql)
+        sqlite.closeConn()
+
+        self.radioButtonPri = [None, None, None, None]
+        self.radioButtonPub = [None, None, None, None]
+        i = 0
+        for item, value in self.networkInfo.items():
+            if i == 0:
+                self.radioButtonPub[i] = urwid.RadioButton(self.typeGroup[i], u"Public", state=True)
+                self.radioButtonPri[i] = urwid.RadioButton(self.typeGroup[i], u"Private")
+                rows.append(urwid.Columns([urwid.Text("网卡"+(str)(i+1)+"："+(str)(item)),
                                        urwid.Text("子网"+(str)(i+1)+"："+(str)(value)),
                                        empty,
-                                       urwid.Columns([urwid.Text("*请选择类型："), urwid.RadioButton(typeGroup[i], u"Public", state=True),
-                                                      urwid.RadioButton(typeGroup[i], u"Private")])]))
+                                       urwid.Columns([urwid.Text("*请选择类型："), self.radioButtonPub[i],
+                                                      self.radioButtonPri[i]])]))
             else:
+                self.radioButtonPub[i] = urwid.RadioButton(self.typeGroup[i], u"Public")
+                self.radioButtonPri[i] = urwid.RadioButton(self.typeGroup[i], u"Private", state=True)
                 rows.append(urwid.Columns([urwid.Text("网卡" +(str)(i+1)+"：" + (str)(item)),
                                            urwid.Text("子网" +(str)(i+1)+"："+ (str)(value)),
                                            empty,
-                                           urwid.Columns([urwid.Text("*请选择类型："), urwid.RadioButton(typeGroup[i], u"Public"),
-                                                          urwid.RadioButton(typeGroup[i], u"Private", state=True)])]))
+                                           urwid.Columns([urwid.Text("*请选择类型："), self.radioButtonPub[i],
+                                                          self.radioButtonPri[i]])]))
             i = i + 1
 
         rows.append(urwid.Divider())

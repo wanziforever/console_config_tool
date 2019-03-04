@@ -12,6 +12,7 @@ import sqlite3
 #import forms.dbBaseConfigForm
 from forms.dbProfileForm import dbProfileForm
 from forms.networkMgrForm import networkMgrForm
+from forms.networkInfoForm import networkInfoForm
 #from forms.dbUserConfigForm import dbUserConfigForm
 #from forms.shareStorageForm import shareStorageForm
 #from forms.fenseDeviceForm import fenseDeviceForm
@@ -59,6 +60,9 @@ class Form(object):
             return form.show_form()
         if self._id =="networkConfig":
             form = networkMgrForm()
+            return form.show_form()
+        if self._id == "networkInfo":
+            form = networkInfoForm();
             return form.show_form()
 
         return example_form()
